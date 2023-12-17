@@ -29,12 +29,24 @@ public class Employee {
     }
     public Employee(){}
 
+    public Long getId() {
+        return id;
+    }
+
     public int getIdSystem() {
         return idSystem;
     }
 
     public void setIdSystem(int idSystem) {
         this.idSystem = idSystem;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
     public LocalDate getStartDate() {
