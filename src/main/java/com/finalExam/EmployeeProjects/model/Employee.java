@@ -1,7 +1,6 @@
 package com.finalExam.EmployeeProjects.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDate;
@@ -9,8 +8,11 @@ import java.time.LocalDate;
 @Table(name = "employee")
 
 public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotBlank
-    private int id;
+    private int idSystem;
     @NotBlank
     private LocalDate startDate;
     @NotBlank
@@ -19,20 +21,20 @@ public class Employee {
     private int projectId;
 
 
-    public Employee(int id, int projectId, LocalDate startDate, LocalDate endDate ) {
-        this.id = id;
+    public Employee(int idSystem, int projectId, LocalDate startDate, LocalDate endDate ) {
+        this.idSystem = idSystem;
         this.startDate = startDate;
         this.endDate = endDate;
         this.projectId = projectId;
     }
     public Employee(){}
 
-    public int getId() {
-        return id;
+    public int getIdSystem() {
+        return idSystem;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdSystem(int idSystem) {
+        this.idSystem = idSystem;
     }
 
     public LocalDate getStartDate() {
