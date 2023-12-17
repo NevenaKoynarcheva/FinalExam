@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Together</title>
+
+</head>
+<body>
+<h1>Together</h1>
+
+<table>
+    <tr th:each="element : ${project}">
+        <td th:text="'Days worked with: ' + ${element.key}">keyvalue</td>
+        <table>
+            <tr th:each="value : ${element.value}">
+                <td th:text="'Employee of the project ' + ${value}">Some name</td>
+            </tr>
+        </table>
+    </tr>
+</table>
+</body>
+</html>
