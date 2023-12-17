@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -40,7 +38,7 @@ public class EmployeeController {
 
     @GetMapping ("/employees")
     public String importEmployees(Model model) {
-        String csvFilePath = "/src/main/resources/csv/csvFile.csv"; // Update with the actual path
+        String csvFilePath = "/src/main/resources/csv/csvFile.csv";
         List<Employee> employees = csvRead.read("/src/main/resources/csv/csvFile.csv");;
         for (Employee e : employees) {
             if (!employeeService.isExist(e)) {
@@ -51,7 +49,7 @@ public class EmployeeController {
 
         model.addAttribute("employees" ,employeeService.findAll());
         return "employee";
-       // return "redirect:/employee/list"; // Redirect to a page showing the list of employees
+
     }
 
 }

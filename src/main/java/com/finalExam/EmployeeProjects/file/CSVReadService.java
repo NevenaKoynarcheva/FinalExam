@@ -12,6 +12,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 @Service
 public class CSVReadService implements CSVReader {
@@ -33,10 +34,10 @@ public class CSVReadService implements CSVReader {
                     if (isInteger(read[0]) && isInteger(read[1])) {
                         int id = Integer.parseInt(read[0]);
                         int projectId = Integer.parseInt(read[1]);
-                        LocalDate dateStart = LocalDate.parse(read[2], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                        LocalDate dateStart = parseDynamicDateFormat(read[2]);
                         LocalDate dateEnd = LocalDate.now();
                         if (!read[3].equals("NULL")) {
-                            dateEnd = LocalDate.parse(read[3], DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                            dateEnd = parseDynamicDateFormat(read[3]);
                         }
                         Employee employee = new Employee(id, projectId, dateStart, dateEnd);
                         employees.add(employee);
@@ -50,6 +51,24 @@ public class CSVReadService implements CSVReader {
             e.printStackTrace();
         }
         return employees;
+    }
+     private static LocalDate parseDynamicDateFormat (String input){
+        List<DateTimeFormatter> formatters = Arrays.asList(
+                DateTimeFormatter.ofPattern("yyyy-MM-dd"),
+                DateTimeFormatter.ofPattern("MM-dd-yyyy"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy")
+
+        );
+
+        for (DateTimeFormatter formatter : formatters) {
+            try {
+                return LocalDate.parse(input, formatter);
+            } catch (Exception ignored) {
+
+            }
+        }
+
+        throw new IllegalArgumentException("Unsupported date format: " + input);
     }
     private boolean isInteger(String number){
         try {
