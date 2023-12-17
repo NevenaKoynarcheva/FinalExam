@@ -16,13 +16,13 @@ public class EmployeeProjectsApplication {
 
 			connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/", "postgres", "1234");
 			statement = connection.createStatement();
-			statement.executeQuery("SELECT count(*) FROM pg_database WHERE datname = 'employeeProject'");
+			statement.executeQuery("SELECT count(*) FROM pg_database WHERE datname = 'employeedb'");
 			ResultSet resultSet = statement.getResultSet();
 			resultSet.next();
 			int count = resultSet.getInt(1);
 
 			if (count <= 0) {
-				statement.executeUpdate("CREATE DATABASE employeeProject");
+				statement.executeUpdate("CREATE DATABASE employeedb");
 
 			}
 		} catch (SQLException e) {

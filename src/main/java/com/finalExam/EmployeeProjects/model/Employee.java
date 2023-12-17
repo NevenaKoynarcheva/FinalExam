@@ -2,6 +2,7 @@ package com.finalExam.EmployeeProjects.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 @Entity
@@ -11,13 +12,13 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+    @NotNull
     private int idSystem;
-    @NotBlank
+    @NotNull
     private LocalDate startDate;
-    @NotBlank
+    @NotNull
     private LocalDate endDate;
-    @NotBlank
+    @NotNull
     private int projectId;
 
 

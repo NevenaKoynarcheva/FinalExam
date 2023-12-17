@@ -1,10 +1,10 @@
 package com.finalExam.EmployeeProjects.service;
 
+
 import com.finalExam.EmployeeProjects.model.Employee;
 import com.finalExam.EmployeeProjects.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -12,15 +12,9 @@ import java.util.List;
 public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
-    public String createEmployee(Employee employee){
-        try {
-            employeeRepository.save(employee);
-        }catch (Exception e){
-            return "Wrong information";
-        }
-        return "Success";
+    public void saveEmployee(Employee employee){
+        employeeRepository.save(employee);
     }
-
     public List<Employee> findAll(){
         return employeeRepository.findAll();
 
