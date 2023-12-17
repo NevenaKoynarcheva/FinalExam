@@ -25,15 +25,19 @@ public class EmployeeController {
         this.csvReader = csvRead;
     }
 
-    @GetMapping("/employees")
-    public List<Employee> importEmployees(Model model) {
+    @GetMapping ("/employees")
+    public String importEmployees(Model model) {
         String csvFilePath = "/src/main/resources/csv/csvFile.csv"; // Update with the actual path
-
         List<Employee> employees = csvReader.read(csvFilePath);
-        for (Employee e  : employees) {
-            employeeService.saveEmployee(e);
+        for (Employee e : employees) {
+            if (!employeeService.isExist(e)) {
+                employeeService.saveEmployee(e);
+            }
+
         }
-        return employeeService.findAll();
+
+        model.addAttribute("employees" ,employeeService.findAll());
+        return "employee";
        // return "redirect:/employee/list"; // Redirect to a page showing the list of employees
     }
 

@@ -19,6 +19,17 @@ public class EmployeeService {
         return employeeRepository.findAll();
 
     }
+    public boolean isExist(Employee e){
+        for (Employee employee : employeeRepository.findAll()){
+          if (e.getIdSystem() == employee.getIdSystem() && e.getProjectId() == employee.getProjectId()
+                  && e.getStartDate().equals( employee.getStartDate())) {
+              return true;
+
+          }
+      }
+
+      return false;
+    }
     public String delete(Long id){
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
