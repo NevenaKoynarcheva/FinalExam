@@ -6,6 +6,7 @@ import com.finalExam.EmployeeProjects.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -48,6 +49,7 @@ public class EmployeeService {
                 e.setProjectId(employee.getProjectId());
                 e.setStartDate(employee.getStartDate());
                 e.setEndDate(employee.getEndDate());
+
                 employeeRepository.save(e);
 
             }

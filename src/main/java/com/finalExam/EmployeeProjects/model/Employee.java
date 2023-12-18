@@ -16,7 +16,6 @@ public class Employee {
     private int idSystem;
     @NotNull
     private LocalDate startDate;
-    @NotNull
     private LocalDate endDate;
     @NotNull
     private int projectId;

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,9 @@ public class EmployeeController {
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable Long id,@ModelAttribute Employee employee){
+        if (employee.getEndDate() == null){
+            employee.setEndDate(LocalDate.now());
+        }
         employeeService.editById(id,employee);
         return "redirect:/";
     }
