@@ -11,6 +11,7 @@
 <div>
     <a class = "employee" href="/employee/together" > Employee Common Project </a>
     <a class = "employee" href="/project" > All Project </a>
+    <a class="employee" href="/addNewEmployee" >Add new employee form csv</a>
 </div>
 <div>
     <ul>
@@ -19,6 +20,8 @@
             <span th:text = " ${employee.projectId}">Project</span>
             <span th:text = " ${employee.startDate}">Start</span>
             <span th:text = "${employee.endDate}">End</span>
+            <a th:href="@{/delete/{id}(id=${employee.id})}">Delete</a>
+            <a th:href="@{/edit/{id}(id=${employee.id})}">Edit</a>
         </li>
     </ul>
 </div>

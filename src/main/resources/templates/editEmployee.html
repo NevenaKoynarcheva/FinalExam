@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>/edit/employee</title>
+</head>
+<body>
+
+<h1>Edit Employee</h1>
+<form th:action=" @{/edit/{id}(id=${employee.id})}" th:object = "${employee}" method="post">
+  <div>
+    <label>Id</label>
+    <input type = text th:field = "*{idSystem}">
+  </div>
+  <div>
+    <label>Project Id</label>
+    <input type = text th:field = "*{projectId}">
+  </div>
+  <div>
+    <label>Start date</label>
+    <input type = text th:field = "*{startDate}">
+  </div>
+  <div>
+    <label>End date</label>
+    <input type = text th:field = "*{endDate}">
+  </div>
+  <input type="submit" value="Submit">
+</form>
+
+</body>
+</html>

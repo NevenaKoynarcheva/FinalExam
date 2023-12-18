@@ -1,28 +1,25 @@
 package com.finalExam.EmployeeProjects.projectManagment;
-
-import com.finalExam.EmployeeProjects.file.CSVReadService;
-import com.finalExam.EmployeeProjects.file.CSVReader;
 import com.finalExam.EmployeeProjects.model.Employee;
+import com.finalExam.EmployeeProjects.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 @Component
 public class ProjectManagment {
     @Autowired
-    private CSVReader csvReader = new CSVReadService();
+   private EmployeeService employeeService;
+    private List<Employee> employees = new ArrayList<>();
 
+    private Map<Integer, List<Employee>> employeeProjects() {
+        if (employeeService.findAll() != null){
+            this.employees =  employeeService.findAll();
+        }
 
-    private final List<Employee> employees = csvReader.read("/src/main/resources/csv/csvFile.csv");
-
-
-    private LinkedHashMap<Integer, List<Employee>> employeeProjects() {
-        LinkedHashMap<Integer, List<Employee>> projects = new LinkedHashMap<>();
+        Map<Integer, List<Employee>> projects = new LinkedHashMap<>();
         for (Employee employee : employees) {
             if (!projects.containsKey(employee.getProjectId())) {
                 projects.put(employee.getProjectId(), new ArrayList<>());
@@ -32,9 +29,13 @@ public class ProjectManagment {
         }
         return projects;
     }
-    public LinkedHashMap<Integer, Integer> workingOnProject(){
-        LinkedHashMap<Integer, List<Employee>> project = employeeProjects();
-        LinkedHashMap<Integer,Integer> workingOnProject = new LinkedHashMap<>();
+    public Map<Integer, Integer> workingOnProject(){
+        if (employeeService.findAll() != null){
+            this.employees =  employeeService.findAll();
+        }
+
+        Map<Integer, List<Employee>> project = employeeProjects();
+        Map<Integer,Integer> workingOnProject = new LinkedHashMap<>();
         for (Map.Entry<Integer, List<Employee>> entry : project.entrySet()){
             if (!workingOnProject.containsKey(entry.getKey())){
                 workingOnProject.put(entry.getKey(),0);
@@ -47,9 +48,9 @@ public class ProjectManagment {
         return workingOnProject;
     }
     // We save information about the employees working together on the same project.
-    public LinkedHashMap<Integer, List<Integer>> workingHours() {
-        LinkedHashMap<Integer, List<Employee>> mathEmployee = employeeProjects();
-        LinkedHashMap<Integer, List<Integer>> workingHard = new LinkedHashMap<>();
+    public Map<Integer, List<Integer>> workingHours() {
+        Map<Integer, List<Employee>> mathEmployee = employeeProjects();
+        Map<Integer, List<Integer>> workingHard = new TreeMap<>(Comparator.reverseOrder());
         int workingDays = 0;
         for (Map.Entry<Integer, List<Employee>> entry : mathEmployee.entrySet()) {
             List<Employee> employeesInProject = entry.getValue();

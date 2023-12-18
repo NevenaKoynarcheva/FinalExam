@@ -12,6 +12,7 @@ import java.util.List;
 public class EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+
     public void saveEmployee(Employee employee){
         employeeRepository.save(employee);
     }
@@ -30,28 +31,29 @@ public class EmployeeService {
 
       return false;
     }
-    public String delete(Long id){
+    public void delete(Long id){
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
-            return "Success";
+
         }else {
-            return "There is no such employee";
+            throw new IllegalArgumentException();
         }
     }
-    public String editById(Long id, Employee employee){
+    //it's not editing in csv file
+    public void editById(Long id, Employee employee){
         if (findEmployee(id)!=null) {
             Employee e = findEmployee(id);
-            e.setIdSystem(employee.getIdSystem());
-            e.setStartDate(employee.getStartDate());
-            e.setEndDate(employee.getEndDate());
-            employeeRepository.save(e);
-            return "Success";
-        }else {
-            return "Wrong information";
-        }
+            if (e!=null) {
+                e.setIdSystem(employee.getIdSystem());
+                e.setProjectId(employee.getProjectId());
+                e.setStartDate(employee.getStartDate());
+                e.setEndDate(employee.getEndDate());
+                employeeRepository.save(e);
 
+            }
+        }
     }
-    private Employee findEmployee(Long id) {
+    public Employee findEmployee(Long id) {
         List<Employee> employees = employeeRepository.findAll();
         int index = -1;
         for (Employee employee : employees) {
