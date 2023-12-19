@@ -77,17 +77,11 @@ public class EmployeeController {
 
     @GetMapping("/employee/together")
     public String workTogether(Model model){
-        Map<Integer,List<Integer>> working = projectManagment.workingHours();
+        Map<List<Integer>,Integer> working = projectManagment.togetherLong();
         model.addAttribute("project",working);
         return "workingTogether";
     }
-    @GetMapping("/project")
-    public String projectTime(Model model){
-        Map<Integer, Integer> projectTime = projectManagment.workingOnProject();
-        model.addAttribute("projectTime",projectTime);
-        return "project";
-    }
-
 
 
 }
+

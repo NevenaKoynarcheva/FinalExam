@@ -85,7 +85,7 @@ public class CSVReadService implements CSVReader {
     }
 
     private boolean isCorrectDate(LocalDate start, LocalDate end) throws Exception {
-        if (start.until(end, ChronoUnit.DAYS) < 0){
+        if (start.until(end, ChronoUnit.DAYS) >= 0){
             return true;
         }else {
             throw new DateTimeException("Start date can't be after end date");

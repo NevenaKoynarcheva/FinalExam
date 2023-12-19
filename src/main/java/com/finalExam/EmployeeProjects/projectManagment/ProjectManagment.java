@@ -11,7 +11,7 @@ import java.util.*;
 @Component
 public class ProjectManagment {
     @Autowired
-   private EmployeeService employeeService;
+    private EmployeeService employeeService;
     private List<Employee> employees = new ArrayList<>();
 
     private Map<Integer, List<Employee>> employeeProjects() {
@@ -29,24 +29,22 @@ public class ProjectManagment {
         }
         return projects;
     }
-    public Map<Integer, Integer> workingOnProject(){
-        if (employeeService.findAll() != null){
-            this.employees =  employeeService.findAll();
-        }
+    public Map<List<Integer>, Integer> togetherLong(){
+        Map<Integer, List<Integer>> days = workingHours();
+        Map<List<Integer>, Integer> daysTogether = new LinkedHashMap<>();
 
-        Map<Integer, List<Employee>> project = employeeProjects();
-        Map<Integer,Integer> workingOnProject = new LinkedHashMap<>();
-        for (Map.Entry<Integer, List<Employee>> entry : project.entrySet()){
-            if (!workingOnProject.containsKey(entry.getKey())){
-                workingOnProject.put(entry.getKey(),0);
+        for (Map.Entry<Integer, List<Integer>> entry : days.entrySet()){
+            List<Integer> sortedList = new ArrayList<>(entry.getValue());
+            Collections.sort(sortedList);
+            if (!daysTogether.containsKey(sortedList)){
+                daysTogether.put(sortedList,0);
             }
-            for (Employee date : entry.getValue())
-            {
-                workingOnProject.put(entry.getKey(),workingOnProject.get(entry.getKey())+((int)date.getStartDate().until(date.getEndDate(),ChronoUnit.DAYS)));
-            }
+            daysTogether.put(sortedList,daysTogether.get(sortedList)+entry.getKey());
         }
-        return workingOnProject;
+        return daysTogether;
+
     }
+
     // We save information about the employees working together on the same project.
     public Map<Integer, List<Integer>> workingHours() {
         Map<Integer, List<Employee>> mathEmployee = employeeProjects();
@@ -71,12 +69,13 @@ public class ProjectManagment {
                     }
 
                     if (workingDays > 0) {
-                          if (!workingHard.containsKey(workingDays)) {
+                        if (!workingHard.containsKey(workingDays)) {
                             workingHard.put(workingDays, new ArrayList<>());
                         }
 
                         workingHard.get(workingDays).add(employeesInProject.get(last).getIdSystem());
                         workingHard.get(workingDays).add(employeesInProject.get(first).getIdSystem());
+
                     }
                 }
             }

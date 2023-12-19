@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.EmptyStackException;
 import java.util.List;
 
 @Service
@@ -37,7 +38,7 @@ public class EmployeeService {
             employeeRepository.deleteById(id);
 
         }else {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("No such employee");
         }
     }
     //it's not editing in csv file
