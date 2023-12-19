@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -57,9 +58,12 @@ public class EmployeeController {
         if (employee.getEndDate() == null){
             employee.setEndDate(LocalDate.now());
         }
-        employeeService.editById(id,employee);
+        if (employee.getStartDate().until(employee.getEndDate(),ChronoUnit.DAYS) > 0) {
+            employeeService.editById(id, employee);
+        }
         return "redirect:/";
     }
+
     @GetMapping("/edit/{id}")
     public String editTodoForm(@PathVariable Long id,Model model){
         try {
@@ -74,7 +78,6 @@ public class EmployeeController {
     @GetMapping("/employee/together")
     public String workTogether(Model model){
         Map<Integer,List<Integer>> working = projectManagment.workingHours();
-
         model.addAttribute("project",working);
         return "workingTogether";
     }

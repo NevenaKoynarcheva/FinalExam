@@ -20,11 +20,12 @@
   <div>
     <label>Start date</label>
     <input type = text th:field = "*{startDate}">
+
   </div>
   <div>
     <label>End date</label>
-  <input type="text" th:if="${endDate != null}" th:field="*{endDate}" th:value="${endDate != null} ? *{#dates.format(endDate, 'yyyy-MM-dd')} : ''"/>
-  <input type="text" th:if="${endDate == null}" th:value="'NULL' ? ' '"/>
+    <span th:text="*{endDate}"> End date </span>
+    <input type="date" th:field="*{endDate}">
   </div>
   <input type="submit" value="Submit">
 </form>

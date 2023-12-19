@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,8 +41,11 @@ public class CSVReadService implements CSVReader {
                         if (!read[3].equals("NULL")) {
                             dateEnd = parseDynamicDateFormat(read[3]);
                         }
-                        Employee employee = new Employee(id, projectId, dateStart, dateEnd);
-                        employees.add(employee);
+
+                        if (isCorrectDate(dateStart, dateEnd)) {
+                            Employee employee = new Employee(id, projectId, dateStart, dateEnd);
+                            employees.add(employee);
+                        }
                     }
 
                 }
@@ -74,8 +79,16 @@ public class CSVReadService implements CSVReader {
         try {
             Integer.parseInt(number);
         }catch (Exception e){
-            return false;
+            e.printStackTrace();
         }
         return true;
+    }
+
+    private boolean isCorrectDate(LocalDate start, LocalDate end) throws Exception {
+        if (start.until(end, ChronoUnit.DAYS) < 0){
+            return true;
+        }else {
+            throw new DateTimeException("Start date can't be after end date");
+        }
     }
 }
