@@ -5,21 +5,21 @@
     <title>Together</title>
 </head>
 <body>
-<h1>Together</h1>
-
-<table>
-    <tr th:each="element : ${project}">
-        <td th:text="'Days worked : ' + ${element.value}"></td>
-        <td>
-            <table>
-                <tr th:each="key : ${element.key}">
-                    <td th:text="'Employee of the projects ' + ${key}"></td>
-                </tr>
-            </table>
-        </td>
+<h1>Employees on Projects</h1>
+<table >
+    <thead>
+    <tr>
+        <th>Employee ID</th>
+        <th>Days</th>
     </tr>
+    </thead>
+    <tbody>
+    <tr th:each="entry : ${employees.entrySet()}">
+        <td th:text="${entry.key}"></td>
+        <td th:text="${entry.value}"></td>
+    </tr>
+    </tbody>
 </table>
-
 <table>
     <tbody>
     <tr th:each="entry : ${days.entrySet()}">
@@ -34,5 +34,4 @@
 
 </body>
 </html>
-
 

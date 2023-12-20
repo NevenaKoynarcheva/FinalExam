@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Component
 public class ProjectManagment {
@@ -30,30 +32,16 @@ public class ProjectManagment {
         }
         return projects;
     }
-    //The method returns people who work together and how many days they worked together
-    public Map<List<Integer>, Integer> togetherLong(){
-        Map<Integer, List<Integer>> days = working();
-        Map<List<Integer>, Integer> daysTogether = new LinkedHashMap<>();
 
-        for (Map.Entry<Integer, List<Integer>> entry : days.entrySet()){
-            List<Integer> sortedList = new ArrayList<>(entry.getValue());
-            Collections.sort(sortedList);
-            if (!daysTogether.containsKey(sortedList)){
-                daysTogether.put(sortedList,0);
-            }
-            daysTogether.put(sortedList,daysTogether.get(sortedList)+entry.getKey());
-        }
-        return daysTogether;
-
-    }
 
     // We save information about the employees working together on the same project.
-    private Map<Integer, List<Integer>> working() {
+    private Map<List<Employee>, Integer> working() {
         Map<Integer, List<Employee>> mathEmployee = employeeProjects();
-        Map<Integer, List<Integer>> workingHard = new TreeMap<>(Comparator.reverseOrder());
-        int workingDays = 0;
+        Map<List<Employee>, Integer> workingHard = new HashMap<>();
+
         for (Map.Entry<Integer, List<Employee>> entry : mathEmployee.entrySet()) {
             List<Employee> employeesInProject = entry.getValue();
+            int workingDays = 0;
             for (int first = 0; first < employeesInProject.size(); first++) {
                 for (int last = employeesInProject.indexOf(employeesInProject.get(first)) + 1; last < employeesInProject.size(); last++) {
                     //We are comparing the work periods to determine if there is any overlap.
@@ -69,12 +57,13 @@ public class ProjectManagment {
                     }
 
                     if (workingDays > 0) {
-                        if (!workingHard.containsKey(workingDays)) {
-                            workingHard.put(workingDays, new ArrayList<>());
+                        List<Employee> employees1 = new ArrayList<>();
+                        employees1.add(employeesInProject.get(first));
+                        employees1.add(employeesInProject.get(last));
+                        employees1.sort(Comparator.comparingInt(Employee::getIdSystem));
+                        if (!workingHard.containsKey(employees1)) {
+                            workingHard.put(employees1,workingDays);
                         }
-
-                        workingHard.get(workingDays).add(employeesInProject.get(last).getIdSystem());
-                        workingHard.get(workingDays).add(employeesInProject.get(first).getIdSystem());
 
                     }
                 }
@@ -85,38 +74,71 @@ public class ProjectManagment {
 
         return workingHard;
     }
+    public Map<Integer, Integer> project(){
+        Map<List<Integer>,Integer> employee = daysOnProjects();
+        Map<List<Employee> , Integer> projectDay = working();
+        Map<Integer, Integer> projects = new LinkedHashMap<>();
+        for (Map.Entry<List<Integer>, Integer> entry : employee.entrySet()){
+            for (Map.Entry<List<Employee>, Integer> entry1 : projectDay.entrySet()){
+                List<Integer> integers = new ArrayList<>();
+                int projectId = 0;
+                for (Employee employee1 : entry1.getKey()){
+                    integers.add(employee1.getIdSystem());
+                    projectId = employee1.getProjectId();
+                }
 
-    public Map<Integer,Integer> daysOnProject(){
-        Map<Integer, Integer> days = new HashMap<>();
-
-            for (Map.Entry<Integer,List<Integer>> entry1 : working().entrySet()) {
-                {
-                    for (Map.Entry<Integer, List<Employee>> entry : employeeProjects().entrySet()) {
-                        List<Integer> employee = new ArrayList<>();
-                        for (Employee e : entry.getValue()) {
-                            employee.add(e.getIdSystem());
-                        }
-
-                        List<Integer> value = entry1.getValue();
-                        Collections.sort(employee);
-                        Collections.sort(value);
-                        if (employee.equals(value)) {
-                            if (!days.containsKey(entry.getKey())) {
-                                days.put(entry.getKey(), entry1.getKey());
-                                break;
-                            }
-
-                        }
+                Collections.sort(integers);
+                if (entry.getKey().equals(integers)){
+                    if (!projects.containsKey(projectId)){
+                        projects.put(projectId,entry1.getValue());
                     }
                 }
             }
-        return days;
+        }
+
+        return projects;
     }
+    public Map<List<Integer>,Integer> daysOnProjects(){
+        Map<List<Integer>, Integer> days = new HashMap<>();
+        for (Map.Entry<List<Employee>, Integer> entry : working().entrySet()){
+            List<Employee> employees1 = entry.getKey();
+            List<Integer> id = new ArrayList<>();
+            for (Employee e : employees1){
+                id.add(e.getIdSystem());
+            }
+            Collections.sort(id);
+            if (!days.containsKey(id)){
+                days.put(id,0);
+            }
+            days.put(id, days.get(id) + entry.getValue());
+        }
+        //sorted all employee by days they worked
+        Map<List<Integer>, Integer> sortedMap = days.entrySet()
+                .stream()
+                .sorted(Map.Entry.<List<Integer>, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+        int count = 0;
+        // we return only the employees that worked the most together
+        Map<List<Integer>,Integer> daysOnProject = new LinkedHashMap<>();
+        for (Map.Entry<List<Integer>,Integer> entry : sortedMap.entrySet()){
+            while (count < 1){
+                daysOnProject.put(entry.getKey(),entry.getValue());
+                count++;
+            }
+        }
+        return daysOnProject;
+    }
+
     private boolean dateInterval (LocalDate firstStart, LocalDate firstEnd, LocalDate lastStart, LocalDate lastEnd){
         if ((firstStart.isBefore(lastStart)
                 || (firstStart.equals(lastStart))
                 && (firstEnd.isAfter(lastStart)))){
-               return true;
+            return true;
         }else{
             return false;
         }

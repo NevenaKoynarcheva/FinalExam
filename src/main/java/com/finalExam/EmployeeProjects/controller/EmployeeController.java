@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 
 @Controller
@@ -77,10 +78,9 @@ public class EmployeeController {
 
     @GetMapping("/employee/together")
     public String workTogether(Model model){
-        Map<List<Integer>,Integer> working = projectManagment.togetherLong();
-        Map<Integer, Integer> projectDays = projectManagment.daysOnProject();
-        model.addAttribute("days", projectDays);
-        model.addAttribute("project",working);
+        Map<List<Integer>,Integer> daysOnProjects = projectManagment.daysOnProjects();
+        model.addAttribute("days", projectManagment.project());
+        model.addAttribute("employees", daysOnProjects);
         return "workingTogether";
     }
 
