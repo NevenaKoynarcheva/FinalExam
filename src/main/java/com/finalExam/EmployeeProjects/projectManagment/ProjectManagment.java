@@ -1,6 +1,7 @@
 package com.finalExam.EmployeeProjects.projectManagment;
 import com.finalExam.EmployeeProjects.model.Employee;
 import com.finalExam.EmployeeProjects.service.EmployeeService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,7 +14,7 @@ public class ProjectManagment {
     @Autowired
     private EmployeeService employeeService;
     private List<Employee> employees = new ArrayList<>();
-
+    //Method return all projects and there employees
     private Map<Integer, List<Employee>> employeeProjects() {
         if (employeeService.findAll() != null){
             this.employees =  employeeService.findAll();
@@ -29,8 +30,9 @@ public class ProjectManagment {
         }
         return projects;
     }
+    //The method returns people who work together and how many days they worked together
     public Map<List<Integer>, Integer> togetherLong(){
-        Map<Integer, List<Integer>> days = workingHours();
+        Map<Integer, List<Integer>> days = working();
         Map<List<Integer>, Integer> daysTogether = new LinkedHashMap<>();
 
         for (Map.Entry<Integer, List<Integer>> entry : days.entrySet()){
@@ -46,7 +48,7 @@ public class ProjectManagment {
     }
 
     // We save information about the employees working together on the same project.
-    public Map<Integer, List<Integer>> workingHours() {
+    private Map<Integer, List<Integer>> working() {
         Map<Integer, List<Employee>> mathEmployee = employeeProjects();
         Map<Integer, List<Integer>> workingHard = new TreeMap<>(Comparator.reverseOrder());
         int workingDays = 0;
@@ -55,15 +57,13 @@ public class ProjectManagment {
             for (int first = 0; first < employeesInProject.size(); first++) {
                 for (int last = employeesInProject.indexOf(employeesInProject.get(first)) + 1; last < employeesInProject.size(); last++) {
                     //We are comparing the work periods to determine if there is any overlap.
-                    if ((employeesInProject.get(first).getStartDate().isBefore(employeesInProject.get(last).getStartDate()))
-                            || (employeesInProject.get(first).getStartDate().equals(employeesInProject.get(last).getStartDate())
-                            && (employeesInProject.get(first).getEndDate().isAfter(employeesInProject.get(last).getStartDate())))) {
+                    if (dateInterval(employeesInProject.get(first).getStartDate(), employeesInProject.get(first).getStartDate(),
+                            employeesInProject.get(last).getStartDate(), employeesInProject.get(last).getEndDate())) {
 
                         workingDays = calculateWorkingDay(employeesInProject.get(last).getStartDate(), employeesInProject.get(first).getEndDate(), employeesInProject.get(last).getEndDate());
 
-                    } else if (((employeesInProject.get(last).getStartDate().isBefore(employeesInProject.get(first).getStartDate()))
-                            || (employeesInProject.get(last).getStartDate().equals(employeesInProject.get(first).getStartDate())
-                            && (employeesInProject.get(last).getEndDate().isAfter(employeesInProject.get(first).getStartDate()))))) {
+                    } else if (dateInterval(employeesInProject.get(last).getStartDate(), employeesInProject.get(last).getEndDate(),
+                            employeesInProject.get(first).getStartDate(), employeesInProject.get(first).getEndDate())) {
 
                         workingDays = calculateWorkingDay(employeesInProject.get(first).getStartDate(), employeesInProject.get(last).getEndDate(), employeesInProject.get(first).getEndDate());
                     }
@@ -82,7 +82,44 @@ public class ProjectManagment {
 
         }
 
+
         return workingHard;
+    }
+
+    public Map<Integer,Integer> daysOnProject(){
+        Map<Integer, Integer> days = new HashMap<>();
+
+            for (Map.Entry<Integer,List<Integer>> entry1 : working().entrySet()) {
+                {
+                    for (Map.Entry<Integer, List<Employee>> entry : employeeProjects().entrySet()) {
+                        List<Integer> employee = new ArrayList<>();
+                        for (Employee e : entry.getValue()) {
+                            employee.add(e.getIdSystem());
+                        }
+
+                        List<Integer> value = entry1.getValue();
+                        Collections.sort(employee);
+                        Collections.sort(value);
+                        if (employee.equals(value)) {
+                            if (!days.containsKey(entry.getKey())) {
+                                days.put(entry.getKey(), entry1.getKey());
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        return days;
+    }
+    private boolean dateInterval (LocalDate firstStart, LocalDate firstEnd, LocalDate lastStart, LocalDate lastEnd){
+        if ((firstStart.isBefore(lastStart)
+                || (firstStart.equals(lastStart))
+                && (firstEnd.isAfter(lastStart)))){
+               return true;
+        }else{
+            return false;
+        }
     }
     private int calculateWorkingDay(LocalDate lastStart, LocalDate firstEnd, LocalDate lastEnd ){
         int workingDays = 0;
