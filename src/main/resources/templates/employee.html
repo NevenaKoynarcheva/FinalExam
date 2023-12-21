@@ -3,26 +3,24 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Employee List</title>
-
+    <title>Employees</title>
+    <link rel="stylesheet" th:href = "@{/css/main.css}"/>
 </head>
 <body>
 <h1>Employee List</h1>
 <div>
-    <a class = "employee" href="/employee/together" > Employee Common Project </a>
+    <button><a class = "employee" href="/employee/together" > Employees Common Projects </a></button>
+    <button><a class=  "employee" href="/addNewEmployee" >Add new employees from csv</a></button>
 </div>
-    <div>
-    <a class=  "employee" href="/addNewEmployee" >Add new employee form csv</a>
-    </div>
-<div>
+<div class="centered-list">
     <ul>
         <li th:each="employee : ${employees}">
             <span th:text="${employee.idSystem}">Id</span>
             <span th:text = " ${employee.projectId}">Project</span>
             <span th:text = " ${employee.startDate}">Start</span>
             <span th:text = "${employee.endDate}">End</span>
-            <a th:href="@{/delete/{id}(id=${employee.id})}">Delete</a>
-            <a th:href="@{/edit/{id}(id=${employee.id})}">Edit</a>
+            <a class="edit" th:href="@{/delete/{id}(id=${employee.id})}">Delete</a>
+            <a class="delete" th:href="@{/edit/{id}(id=${employee.id})}">Edit</a>
         </li>
     </ul>
 </div>

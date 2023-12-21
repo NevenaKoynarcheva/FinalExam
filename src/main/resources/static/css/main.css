@@ -1,0 +1,92 @@
+* {
+    /* reset styles */
+    background-color : #ffe6cc;
+     text-align:center;
+     margin: 0px;
+     padding: 0px;
+}
+
+h1 {
+    color: #555;
+    font-size: 45px;
+
+}
+h2{
+color: #555;
+font-size: 35px;
+}
+.employee{
+
+}
+button{
+       margin  : 25px;
+       font-size: 20px;
+       border-radius: 12px;
+       background-color : #ffe6cc;
+       color : white;
+
+}
+ul{
+   text-align : center;
+   list-style : none;
+}
+ul li{
+    padding-bottom : 10px;
+    font-size: 20px;
+
+}
+table{
+ border: 1px solid;
+ margin-left : auto;
+ margin-right : auto;
+ font-size: 20px;
+ margin-top : 30px;
+ }
+
+ a {
+             color: purple;
+             text-decoration: none;
+         }
+
+         a:visited {
+             color: purple;
+         }
+         a:hover {
+             color: black;
+         }
+         a:active, a:focus {
+             color: blue;
+         }
+         }
+.edit {
+  margin: auto;
+  width: 10px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.edit label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+
+.edit input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+}
+
+.edit input[type="submit"] {
+  background-color: #555;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

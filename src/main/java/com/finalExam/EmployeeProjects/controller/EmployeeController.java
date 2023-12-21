@@ -58,6 +58,9 @@ public class EmployeeController {
         if (employee.getEndDate() == null){
             employee.setEndDate(LocalDate.now());
         }
+        if (employee.getStartDate() == null){
+            employee.setStartDate(employeeService.findEmployee(id).getStartDate());
+        }
 
         if (employee.getStartDate().until(employee.getEndDate(),ChronoUnit.DAYS) > 0) {
             employeeService.editById(id, employee);
