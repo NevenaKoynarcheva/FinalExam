@@ -6,32 +6,24 @@
 </head>
 <body>
 <h1>Employees on Projects</h1>
-<table >
-    <thead>
-    <tr>
-        <th>Employee ID</th>
-        <th>Days</th>
-    </tr>
-    </thead>
+
+<table>
     <tbody>
     <tr th:each="entry : ${employees.entrySet()}">
-        <td th:text="${entry.key}"></td>
-        <td th:text="${entry.value}"></td>
+        <td th:text="'Employees id: ' + ${entry.key}"></td>
+        <td th:text="'All days: ' + ${entry.value}"></td>
     </tr>
     </tbody>
 </table>
+
+<h2>Days on Projects</h2>
 <table>
     <tbody>
     <tr th:each="entry : ${days.entrySet()}">
-
-        <td th:text="'Project: '+${entry.key}"></td>
-        <td th:text="'Days '+ ${entry.value}"></td>
+        <td th:text="'Project: ' + ${entry.key}"></td>
+        <td th:text="'Days: ' + ${entry.value}"></td>
     </tr>
     </tbody>
 </table>
-
-
-
 </body>
 </html>
-

@@ -20,7 +20,7 @@ import java.util.List;
 public class CSVReadService implements CSVReader {
     //TODO more Data format
     @Override
-    public List<Employee> read(String path) {
+    public List<Employee> read() {
         List<Employee> employees = new ArrayList<>();
         ClassPathResource resource = new ClassPathResource("csv/csvFile.csv");
 

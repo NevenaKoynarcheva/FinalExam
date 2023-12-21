@@ -8,6 +8,6 @@ import com.finalExam.EmployeeProjects.model.Employee;
 import java.util.List;
 
 public interface CSVReader {
-    public List<Employee> read(String path);
+    public List<Employee> read();
 
 }

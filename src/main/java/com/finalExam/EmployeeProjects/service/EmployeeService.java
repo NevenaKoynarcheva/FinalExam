@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.EmptyStackException;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class EmployeeService {
@@ -30,15 +31,15 @@ public class EmployeeService {
 
           }
       }
+       return false;
 
-      return false;
     }
     public void delete(Long id){
         if (employeeRepository.existsById(id)) {
             employeeRepository.deleteById(id);
 
         }else {
-            throw new IllegalArgumentException("No such employee");
+            throw new NoSuchElementException("Employee not found");
         }
     }
     //it's not editing in csv file
@@ -54,7 +55,10 @@ public class EmployeeService {
                 employeeRepository.save(e);
 
             }
+        }else {
+            throw new NoSuchElementException("Employee not found");
         }
+
     }
     public Employee findEmployee(Long id) {
         List<Employee> employees = employeeRepository.findAll();

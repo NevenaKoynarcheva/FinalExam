@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 @Controller
@@ -29,8 +29,7 @@ public class EmployeeController {
 
     @GetMapping ("/addNewEmployee")
     public String importNewEmployees(Model model) {
-        String csvFilePath = "/src/main/resources/csv/csvFile.csv";
-        List<Employee> employees = csvRead.read("/src/main/resources/csv/csvFile.csv");;
+        List<Employee> employees = csvRead.read();
         for (Employee e : employees) {
             if (!employeeService.isExist(e)) {
                 employeeService.saveEmployee(e);
@@ -59,9 +58,13 @@ public class EmployeeController {
         if (employee.getEndDate() == null){
             employee.setEndDate(LocalDate.now());
         }
+
         if (employee.getStartDate().until(employee.getEndDate(),ChronoUnit.DAYS) > 0) {
             employeeService.editById(id, employee);
+        }else {
+            throw new DateTimeException("Start date can't be after end date");
         }
+
         return "redirect:/";
     }
 
