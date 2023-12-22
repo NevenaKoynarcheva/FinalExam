@@ -11,7 +11,7 @@ HTML and CSS: For web interface styling.
 ### Connection to PostgreSQL
 The connection to PostgreSQL and creating a database is established manually in the main class. Hibernate is employed to send queries to our database, where all employees information from the file is stored.
 
-## Finding Workers with Most Work Days Together
+## Finding Employees with Most Work Days Together
 To identify the pair of employees who have worked the most days together:
 
 First, we create a data structure to store all projects and the employees involved in them.
