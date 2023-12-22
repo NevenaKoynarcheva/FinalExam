@@ -9,7 +9,7 @@ PostgreSQL: Database management system.
 Spring Data: Used for data access.
 HTML and CSS: For web interface styling.
 ### Connection to PostgreSQL
-The connection to PostgreSQL is established manually in the main class. Hibernate is employed to send queries to our database, where all worker information from the file is stored.
+The connection to PostgreSQL and creating a database is established manually in the main class. Hibernate is employed to send queries to our database, where all worker information from the file is stored.
 
 ## Finding Workers with Most Work Days Together
 To identify the pair of workers who have worked the most days together:
