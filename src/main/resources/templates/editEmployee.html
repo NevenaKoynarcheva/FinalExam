@@ -9,7 +9,7 @@
 <body>
 
 <h1>Edit Employee</h1>
-
+<div class="editDiv">
 <form class="edit" th:action=" @{/edit/{id}(id=${employee.id})}" th:object = "${employee}" method="post">
   <div>
     <label>Id</label>
@@ -31,6 +31,6 @@
   </div>
   <input type="submit" value="Submit">
 </form>
-
+</div>
 </body>
 </html>
